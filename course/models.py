@@ -36,7 +36,21 @@ class UserCourse(BaseModel):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
 
-    is_added = models.BooleanField(default=False)
+    is_added = models.BooleanField(default=False, editable=False)
+
+    def save(self, *args, **kwargs):
+        if self.is_added is False:
+            self.is_added = True
+            lessons = self.course.lessons.all()
+            for lesson in lessons:
+                UserLesson.objects.create(
+                    user=self.user,
+                    lesson=lesson
+                )
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.user} -> {self.course}"
 
 
 class UserLesson(BaseModel):
@@ -60,12 +74,8 @@ class UserLesson(BaseModel):
             self.status = self.Status.VIEWED
             self.save()
 
-    def change_watched_time(self):
-        times = self.watched_lessons.filter(is_used=False)
-        for w_time in times:
-            w_time.is_used = True
-            w_time.save()
-            self.watched_times += w_time.watch_time
+    def change_watched_time(self, time):
+        self.watched_times += time
         self.save()
 
 
@@ -74,16 +84,19 @@ class LessonWatched(BaseModel):
                                     related_name='watched_lessons')
     from_time = models.IntegerField(default=0)
     to_time = models.IntegerField(default=0)
-    watch_time = models.IntegerField(default=0)
+    watch_time = models.IntegerField(default=0, editable=False)
 
-    is_used = models.BooleanField(default=False)
+    is_used = models.BooleanField(default=False, editable=False)
 
     def __str__(self):
-        return self.user_lesson
+        return f'{self.user_lesson}'
 
     def save(self, *args, **kwargs):
-        if self.to_time - self.from_time == 15:
+        if self.is_used is False:
+            self.is_used = True
             self.watch_time = self.to_time - self.from_time
+            self.user_lesson.change_watched_time(self.watch_time)
+            self.user_lesson.change_status()
         super().save(*args, **kwargs)
 
 

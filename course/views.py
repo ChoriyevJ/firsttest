@@ -22,6 +22,7 @@ class LessonListAPIView(generics.ListAPIView):
         ).filter(
             in_users=True
         )
+
         return queryset
 
 

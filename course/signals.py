@@ -1,18 +1,17 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from course.models import Course, UserLesson
+from course.models import LessonWatched
 
 
-@receiver(post_save, sender=Course)
-def add_lesson_to_user(sender, instance, created, **kwargs):
+# @receiver(post_save, sender=LessonWatched)
+# def lesson_change_watched_time(sender, instance, created, **kwargs):
+#
+#     if created:
+#         print('\n\n')
+#         print(instance)
+#         print('\n\n')
 
-    users = instance.users.all(is_added=False)
-    for user in users:
-        user.is_added = True
-        UserLesson.objects.create(
-
-        )
 
 
 
