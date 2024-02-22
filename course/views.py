@@ -79,6 +79,13 @@ class CourseListAPIView(generics.ListAPIView):
 
 
 
+'''
+
+for example
+
+'''
+
+
 
 
 
