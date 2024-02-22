@@ -79,6 +79,3 @@ class CourseListAPIView(generics.ListAPIView):
 
         return courses
 
-'''
-changes for conflict
-'''
