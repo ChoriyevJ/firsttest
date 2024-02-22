@@ -79,6 +79,7 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "corsheaders",
     "drf_spectacular",
+    'query_counter',
 ]
 
 LOCAL_APPS = [
@@ -136,6 +137,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
+    'query_counter.middleware.DjangoQueryCounterMiddleware',
 ]
 
 # STATIC
