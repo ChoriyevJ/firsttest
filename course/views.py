@@ -78,15 +78,11 @@ class CourseListAPIView(generics.ListAPIView):
         return courses
 
 
-
 '''
 
+New conflict
 for example
+new codes
+for conflict
 
 '''
-
-
-
-
-
-
