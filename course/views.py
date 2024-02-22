@@ -19,33 +19,6 @@ from course import serializers
 #
 #         return courses
 '''
-'''
-
-[
-    {
-        lesson1,
-        status,
-        watched_times
-    },
-    {
-        lesson2,
-        status,
-        watched_times
-    }
-
-]
-
-
-'''
-
-'''
-Lesson -> python id=1
-
-userlesson1  lesson_id
-userlesson2  lesson_id
-userlesson3  lesson_id
-userlesson4  lesson_id
-'''
 
 
 class LessonListAPIView(generics.ListAPIView):
@@ -106,12 +79,3 @@ class CourseListAPIView(generics.ListAPIView):
 
         return courses
 
-
-'''
-
-New conflict
-for example
-new codes
-for conflict
-
-'''
