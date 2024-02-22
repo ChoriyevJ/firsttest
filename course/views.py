@@ -19,6 +19,33 @@ from course import serializers
 #
 #         return courses
 '''
+'''
+
+[
+    {
+        lesson1,
+        status,
+        watched_times
+    },
+    {
+        lesson2,
+        status,
+        watched_times
+    }
+
+]
+
+
+'''
+
+'''
+Lesson -> python id=1
+
+userlesson1  lesson_id
+userlesson2  lesson_id
+userlesson3  lesson_id
+userlesson4  lesson_id
+'''
 
 
 class LessonListAPIView(generics.ListAPIView):
@@ -56,17 +83,19 @@ class CourseListAPIView(generics.ListAPIView):
 
     def get_queryset(self):
 
-        users_count = models.get_user_model().objects.select_related("users").aggregate(
-            users_count=db_models.Count('id'))['users_count']
+        users_count = models.get_user_model().objects.aggregate(
+            users_count=db_models.Count('id', distinct=True))['users_count']
 
         courses = super().get_queryset().annotate(
             quantity_views=db_models.Count(
-                "lessons",
+                "lessons__user_lessons",
                 filter=db_models.Q(lessons__user_lessons__status=models.Status.VIEWED),
+                distinct=True,
                 output_field=db_models.IntegerField()
             ),
             wasted_time=db_models.Sum(
-                "lessons__user_lessons__watched_times"
+                "lessons__user_lessons__watched_times",
+                distinct=True
             ),
             quantity_users=db_models.Count(
                 "user_courses",
