@@ -7,8 +7,8 @@ from utils.models import BaseModel
 
 
 class Status(models.TextChoices):
-    VIEWED = 'VIEWED', 'Просмотрено'
-    NO_VIEWED = 'NO_VIEWED', 'Не просмотрено'
+    VIEWED = 'Просмотрено', 'VIEWED'
+    NO_VIEWED = 'Не просмотрено', 'NO_VIEWED'
 
 
 class Course(BaseModel):
@@ -97,7 +97,6 @@ class LessonWatched(BaseModel):
                                     related_name='watched_lessons')
     from_time = models.IntegerField(default=0)
     to_time = models.IntegerField(default=0)
-    watch_time = models.IntegerField(default=0, editable=False)
 
     is_used = models.BooleanField(default=False, editable=False)
 
@@ -107,8 +106,8 @@ class LessonWatched(BaseModel):
     def save(self, *args, **kwargs):
         if self.is_used is False:
             self.is_used = True
-            self.watch_time = self.to_time - self.from_time
-            self.user_lesson.change_watched_time(self.watch_time)
+            watch_time = self.to_time - self.from_time
+            self.user_lesson.change_watched_time(watch_time)
             self.user_lesson.change_status()
         super().save(*args, **kwargs)
 
