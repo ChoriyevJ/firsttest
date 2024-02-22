@@ -80,3 +80,4 @@ class CourseListAPIView(generics.ListAPIView):
         return courses
 
 """first commit"""
+"""second commit"""
