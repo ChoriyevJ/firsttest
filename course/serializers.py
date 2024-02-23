@@ -63,6 +63,7 @@ class CourseListSerializer(serializers.ModelSerializer):
     wasted_time = serializers.IntegerField()
     quantity_users = serializers.IntegerField()
     percentage = serializers.FloatField()
+    # total_users = serializers.IntegerField()
 
     class Meta:
         model = models.Course
@@ -72,7 +73,8 @@ class CourseListSerializer(serializers.ModelSerializer):
             'quantity_views',
             'wasted_time',
             'quantity_users',
-            'percentage'
+            'percentage',
+            # 'total_users',
         )
 
     # def get_percentage(self, obj):

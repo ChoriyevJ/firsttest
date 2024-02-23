@@ -21,6 +21,11 @@ class CourseAdmin(admin.ModelAdmin):
     inlines = (UserCourseInline,)
 
 
+@admin.register(models.UserCourse)
+class UserCourseAdmin(admin.ModelAdmin):
+    pass
+
+
 @admin.register(models.Lesson)
 class LessonAdmin(admin.ModelAdmin):
     list_display = ('id', 'title',)
