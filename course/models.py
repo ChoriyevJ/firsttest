@@ -44,11 +44,15 @@ class UserCourse(BaseModel):
         if self.is_added is False:
             self.is_added = True
             lessons = self.course.lessons.all()
-            for lesson in lessons:
-                UserLesson.objects.create(
-                    user=self.user,
-                    lesson=lesson
-                )
+            # for lesson in lessons:
+            #     UserLesson.objects.create(
+            #         user=self.user,
+            #         lesson=lesson
+            #     )
+            UserLesson.objects.bulk_create([
+                UserLesson(lesson=lesson, user=self.user) for lesson in lessons
+            ])
+
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
@@ -65,7 +69,6 @@ class UserCourse(BaseModel):
 
 
 class UserLesson(BaseModel):
-
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE,
                              related_name='user_lessons')
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE,
@@ -110,10 +113,3 @@ class LessonWatched(BaseModel):
             self.user_lesson.change_watched_time(watch_time)
             self.user_lesson.change_status()
         super().save(*args, **kwargs)
-
-
-
-
-
-
-

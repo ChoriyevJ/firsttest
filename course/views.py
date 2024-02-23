@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics
 from django.db import models as db_models
+from django.db.models.functions import Coalesce
 
 from course import models
 from course import serializers
@@ -55,7 +56,6 @@ class CourseListAPIView(generics.ListAPIView):
     serializer_class = serializers.CourseListSerializer
 
     def get_queryset(self):
-
         users_count = models.get_user_model().objects.aggregate(
             users_count=db_models.Count('id', distinct=True))['users_count']
 
@@ -66,10 +66,11 @@ class CourseListAPIView(generics.ListAPIView):
                 distinct=True,
                 output_field=db_models.IntegerField()
             ),
-            wasted_time=db_models.Sum(
-                "lessons__user_lessons__watched_times",
-                distinct=True
-            ),
+            wasted_time=db_models.functions.Coalesce(
+                db_models.Sum(
+                    "lessons__user_lessons__watched_times",
+                    distinct=True
+                ), 0),
             quantity_users=db_models.Count(
                 "user_courses",
                 distinct=True
@@ -78,5 +79,3 @@ class CourseListAPIView(generics.ListAPIView):
         )
 
         return courses
-
-
